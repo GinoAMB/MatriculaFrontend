@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;600;800&display=swap');
+@import "tailwindcss";
+
+body {
+  font-family: 'Manrope', sans-serif;
+}
+
+/* Variables globales */
+:root {
+    --color-primary: #4A6FA5;
+    --color-secondary: #6F61C0;
+    --color-tertiary: #AD88C6;
+    --color-neutral: #F8FAFC;
+}
+
+/* Clases de fondo */
+.bg-primary {
+    background-color: var(--color-primary);
+}
+
+.bg-secondary {
+    background-color: var(--color-secondary);
+}
+
+.bg-tertiary {
+    background-color: var(--color-tertiary);
+}
+
+.bg-neutral {
+    background-color: var(--color-neutral);
+}
+
+/* Clases de texto */
+.text-primary {
+    color: var(--color-primary);
+}
+
+.text-neutral {
+    color: var(--color-neutral);
+}
+
+/*otros estilos personalizados*/
+.bg-primary-transparent2 {
+    background-color: rgba(74, 111, 165, 0.2);
+}
+
+.bg-primary-transparent6 {
+    background-color: rgba(74, 111, 165, 0.6);
+}
+
+
+/* Botón primario */
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 0.6rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* Hover */
+.btn-primary:hover {
+    background-color: var(--color-secondary);
+}
+
+/* Active (cuando haces click) */
+.btn-primary:active {
+    transform: scale(0.97);
+}
+
+/* Disabled */
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Botón secundario */
+.btn-secondary {
+    background-color: #e5e7eb; /* bg-gray-200 */
+    color: #1f2937; /* text-gray-800 */
+    padding: 0.6rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background-color: #d1d5db; /* bg-gray-300 */
+}
+
+.btn-secondary:active {
+    transform: scale(0.97);
+}
+
+.btn-secondary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
