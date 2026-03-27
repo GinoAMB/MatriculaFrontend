@@ -44,6 +44,12 @@ export default function Navbar({ open, setOpen }: any) {
         >
           Panel de Control
         </a>
+        <a
+          href="/admin/users"
+          className="px-3 py-2 rounded-md hover:bg-white"
+        >
+          Gestion de Usuarios
+        </a>
       </nav>
     </aside>
   );
