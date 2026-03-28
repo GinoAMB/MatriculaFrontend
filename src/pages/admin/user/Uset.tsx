@@ -1,7 +1,7 @@
 import UserHeader from "./components/UserHeader";
 import UserFilters from "./components/UserFilters";
 import UserList from "./components/UserList";
-import Pagination from "../../../components/Pagination";
+import Pagination from "@/components/Pagination";
 import { useState } from "react";
 
 export default function User() {
