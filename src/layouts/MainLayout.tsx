@@ -7,8 +7,7 @@ export default function MainLayout() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex">
-      
+    <div className="h-screen flex overflow-hidden">
       {/* SIDEBAR */}
       <Navbar open={open} setOpen={setOpen} />
 
@@ -25,7 +24,7 @@ export default function MainLayout() {
 
         {/* HEADER */}
         <header className="h-16 bg-primary-transparent2 shadow-sm flex items-center justify-between px-4 md:px-6">
-          
+
           {/* BOTÓN MENÚ (solo móvil) */}
           <button
             onClick={() => setOpen(true)}
@@ -52,7 +51,7 @@ export default function MainLayout() {
         </header>
 
         {/* CONTENIDO */}
-        <main className="flex-1 p-4 md:p-6 bg-gray-50">
+        <main className="flex-1 p-4 md:p-6 bg-gray-50 overflow-y-auto">
           <Outlet />
         </main>
       </div>

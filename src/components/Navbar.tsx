@@ -1,5 +1,6 @@
 import { HiAcademicCap } from "react-icons/hi2";
 import { FiX } from "react-icons/fi";
+import { NavLink } from "react-router-dom";
 
 export default function Navbar({ open, setOpen }: any) {
   return (
@@ -7,7 +8,8 @@ export default function Navbar({ open, setOpen }: any) {
       className={`
         fixed md:static top-0 left-0 z-50
         h-full md:h-auto
-        w-64 bg-primary-transparent2 shadow-md p-2 flex flex-col gap-6
+        w-64 bg-white md:bg-[rgba(74,111,165,0.2)]
+        shadow-md p-2 flex flex-col gap-6
         transform transition-transform duration-300
         ${open ? "translate-x-0" : "-translate-x-full"}
         md:translate-x-0
@@ -37,19 +39,32 @@ export default function Navbar({ open, setOpen }: any) {
       </div>
 
       {/* MENÚ */}
-      <nav className="flex flex-col gap-3 text-primary font-semibold">
-        <a
-          href="/admin/dashboard"
-          className="px-3 py-2 rounded-md hover:bg-white"
+      <nav className="flex flex-col gap-3 text-gray-800 md:text-primary font-semibold">
+        <NavLink
+          to="/admin/dashboard"
+          className={({ isActive }) =>
+            `px-3 py-2 rounded-md transition ${
+              isActive
+                ? "bg-gray-100 md:bg-white text-primary shadow"
+                : "hover:bg-gray-100 md:hover:bg-white"
+            }`
+          }
         >
           Panel de Control
-        </a>
-        <a
-          href="/admin/users"
-          className="px-3 py-2 rounded-md hover:bg-white"
+        </NavLink>
+
+        <NavLink
+          to="/admin/users"
+          className={({ isActive }) =>
+            `px-3 py-2 rounded-md transition ${
+              isActive
+                ? "bg-gray-100 md:bg-white text-primary shadow"
+                : "hover:bg-gray-100 md:hover:bg-white"
+            }`
+          }
         >
-          Gestion de Usuarios
-        </a>
+          Gestión de Usuarios
+        </NavLink>
       </nav>
     </aside>
   );
