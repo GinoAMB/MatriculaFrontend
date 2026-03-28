@@ -4,14 +4,16 @@ import { FaUserLock } from "react-icons/fa6";
 type Props = {
     title: string;
     subtitle?: string;
+    onNewUser: () => void;
+    onNewRole: () => void;
 };
 
-export default function UserHeader({ title, subtitle }: Props) {
+export default function UserHeader({ title, subtitle, onNewUser, onNewRole }: Props) {
     return (
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
             {/* Texto */}
             <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-primary">
+                <h1 className="text-xl sm:text-4xl font-bold text-primary">
                     {title}
                 </h1>
                 {subtitle && (
@@ -23,12 +25,18 @@ export default function UserHeader({ title, subtitle }: Props) {
 
             {/* Botones */}
             <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                <button className="btn-primary text-sm flex items-center justify-center gap-2 w-full sm:w-auto">
+                <button
+                    onClick={onNewUser}
+                    className="btn-primary text-sm flex items-center justify-center gap-2 w-full sm:w-auto"
+                >
                     <FaUserPlus />
                     Nuevo Usuario
                 </button>
 
-                <button className="btn-tertiary text-sm flex items-center justify-center gap-2 w-full sm:w-auto">
+                <button
+                    onClick={onNewRole}
+                    className="btn-tertiary text-sm flex items-center justify-center gap-2 w-full sm:w-auto"
+                >
                     <FaUserLock />
                     Nuevo Rol
                 </button>

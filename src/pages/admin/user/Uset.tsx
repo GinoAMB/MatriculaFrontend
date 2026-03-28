@@ -3,6 +3,9 @@ import UserFilters from "./components/UserFilters";
 import UserList from "./components/UserList";
 import Pagination from "@/components/Pagination";
 import { useState } from "react";
+import CreateUserModal from "./modals/CreateUserModal";
+import CreateRoleModal from "./modals/CreateRoleModal";
+import EditUserModal from "./modals/EditUserModal";
 
 export default function User() {
     type User = {
@@ -44,10 +47,6 @@ export default function User() {
         console.log("Filtros:", filters);
     };
 
-    const handleEdit = (user: any) => {
-        console.log("Editar:", user);
-    };
-
     const handleToggleStatus = (user: any) => {
         console.log("Cambiar estado:", user);
     };
@@ -62,11 +61,40 @@ export default function User() {
         currentPage * itemsPerPage
     );
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleCreateUser = (data: any) => {
+        console.log("Usuario creado:", data);
+    };
+
+    const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
+
+    const handleCreateRole = (data: any) => {
+        console.log("Rol creado:", data);
+    };
+
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState<any>(null);
+
+    const handleEdit = (user: any) => {
+        setSelectedUser({
+            ...user,
+            lastname: user.name.split(" ").slice(1).join(" "), // opcional si no tienes lastname
+        });
+        setIsEditModalOpen(true);
+    };
+
+    const handleUpdateUser = (data: any) => {
+        console.log("Usuario actualizado:", data);
+    };
+
     return (
         <div className="flex flex-col gap-3">
             <UserHeader
-                title="Gestión de Usuarios"
-                subtitle="Administra el personal académico, administrativo y los roles de acceso para la IE 33280 San Bartolo."
+                title="Gestión de usuarios"
+                subtitle="Administre el personal academico, administrativo y los roles de acceso para la IE 33280 San Bartolo."
+                onNewUser={() => setIsModalOpen(true)}
+                onNewRole={() => setIsRoleModalOpen(true)}
             />
 
             <UserFilters onSearch={handleSearch} />
@@ -81,11 +109,29 @@ export default function User() {
             <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
-                totalItems={users.length}   
-                itemsPerPage={itemsPerPage}  
+                totalItems={users.length}
+                itemsPerPage={itemsPerPage}
                 onPageChange={setCurrentPage}
             />
 
+            <CreateUserModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onCreate={handleCreateUser}
+            />
+
+            <CreateRoleModal
+                isOpen={isRoleModalOpen}
+                onClose={() => setIsRoleModalOpen(false)}
+                onCreate={handleCreateRole}
+            />
+
+            <EditUserModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                user={selectedUser}
+                onUpdate={handleUpdateUser}
+            />
         </div>
     );
 }

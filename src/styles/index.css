@@ -13,6 +13,13 @@ body {
     --color-neutral: #F8FAFC;
 }
 
+@theme {
+  --color-primary: #4A6FA5;
+  --color-secondary: #6F61C0;
+  --color-tertiary: #AD88C6;
+  --color-neutral: #F8FAFC;
+}
+
 /* Clases de fondo */
 .bg-primary {
     background-color: var(--color-primary);

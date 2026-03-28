@@ -92,7 +92,7 @@ export default function UserList({ users, onEdit, onToggleStatus }: Props) {
                                     </button>
                                     <button
                                         onClick={() => onToggleStatus(user)}
-                                        className={`relative w-10 h-5 flex items-center rounded-full transition-colors ${user.status === "Activo" ? "bg-green-500" : "bg-gray-300"
+                                        className={`relative w-10 h-5 flex items-center rounded-full transition-colors ${user.status === "Activo" ? "bg-primary" : "bg-gray-300"
                                             }`}
                                     >
                                         <span
