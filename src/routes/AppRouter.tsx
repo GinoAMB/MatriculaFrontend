@@ -3,8 +3,8 @@ import Login from "../pages/Login";
 import NotFound from "../pages/NotFound";
 import ForgotPassword from "../pages/ForgotPassword";
 import MainLayout from "../layouts/MainLayout";
-import Dashboard from "../pages/admin/Dashboard/Dashboard";
-import User from "../pages/admin/Uset";
+import Dashboard from "../pages/admin/dashboard/Dashboard";
+import User from "../pages/admin/user/Uset";
 
 export default function AppRouter() {
   return (
