@@ -8,6 +8,7 @@ type User = {
     email: string;
     password?: string;
     status: boolean;
+    role: string;
 };
 
 type Props = {
@@ -25,6 +26,7 @@ export default function EditUserModal({ isOpen, onClose, user, onUpdate }: Props
         email: "",
         password: "",
         status: true,
+        role: "",
     });
 
     useEffect(() => {
@@ -32,6 +34,7 @@ export default function EditUserModal({ isOpen, onClose, user, onUpdate }: Props
             setForm({
                 ...user,
                 password: "", // 👈 nunca cargues la contraseña real
+                role: user.role || "Admin", // 👈 asigna un valor por defecto si no existe
             });
         }
     }, [user]);
@@ -126,6 +129,27 @@ export default function EditUserModal({ isOpen, onClose, user, onUpdate }: Props
                                     required
                                 />
                             </div>
+                        </div>
+
+                        {/* Rol */}
+                        <div className="flex flex-col">
+                            <label className="text-sm font-medium text-gray-700 mb-1">
+                                Rol
+                            </label>
+
+                            <select
+                                name="role"
+                                value={form.role}
+                                onChange={(e) =>
+                                    setForm({ ...form, role: e.target.value })
+                                }
+                                className="bg-gray-100 p-2 rounded text-sm w-full"
+                            >
+                                <option value="" disabled>Seleccione un rol</option>
+                                <option value="Admin">Administrador</option>
+                                <option value="Docente">Docente</option>
+                                <option value="Usuario">Usuario</option>
+                            </select>
                         </div>
 
                         {/* Password */}
