@@ -4,7 +4,6 @@ import UserList from "./components/UserList";
 import Pagination from "@/components/Pagination";
 import { useState } from "react";
 import CreateUserModal from "./modals/CreateUserModal";
-import CreateRoleModal from "./modals/CreateRoleModal";
 import EditUserModal from "./modals/EditUserModal";
 
 export default function User() {
@@ -67,12 +66,6 @@ export default function User() {
         console.log("Usuario creado:", data);
     };
 
-    const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
-
-    const handleCreateRole = (data: any) => {
-        console.log("Rol creado:", data);
-    };
-
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState<any>(null);
 
@@ -94,7 +87,6 @@ export default function User() {
                 title="Gestión de usuarios"
                 subtitle="Administre el personal academico, administrativo y los roles de acceso para la IE 33280 San Bartolo."
                 onNewUser={() => setIsModalOpen(true)}
-                onNewRole={() => setIsRoleModalOpen(true)}
             />
 
             <UserFilters onSearch={handleSearch} />
@@ -118,12 +110,6 @@ export default function User() {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onCreate={handleCreateUser}
-            />
-
-            <CreateRoleModal
-                isOpen={isRoleModalOpen}
-                onClose={() => setIsRoleModalOpen(false)}
-                onCreate={handleCreateRole}
             />
 
             <EditUserModal
