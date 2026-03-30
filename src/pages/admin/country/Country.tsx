@@ -3,6 +3,8 @@ import CountryFilter from "./components/CountryFilters";
 import CountryList from "./components/CountryList";
 import Pagination from "@/components/Pagination";
 import { useState } from "react";
+import CreateCountryModal from "./modals/CreateCountryModal";
+import EditCountryModal from "./modals/EditCountryModal";
 
 export default function Country() {
 
@@ -27,16 +29,17 @@ export default function Country() {
         currentPage * itemsPerPage
     );
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
 
     return (
         <div className="flex flex-col gap-3">
             <CountryHeader
                 title="Gestión de Países"
                 subtitle="Administre el catálogo de países habilitados para el registro de estudiantes y personal del sistema."
-                onNewCountry={() => {
-                    // Aquí puedes abrir un modal o redirigir a una página de creación de país
-                    alert("Función para crear un nuevo país");
-                }}
+                onNewCountry={() => setIsModalOpen(true)}
             />
             <CountryFilter
                 onSearch={(query) => {
@@ -47,8 +50,8 @@ export default function Country() {
             <CountryList
                 countries={paginatedCountries}
                 onEdit={(country) => {
-                    // Aquí puedes abrir un modal o redirigir a una página de edición de país
-                    alert(`Función para editar el país: ${country.name}`);
+                    setSelectedCountry(country);
+                    setIsEditModalOpen(true);
                 }}
             />
 
@@ -58,6 +61,28 @@ export default function Country() {
                 totalItems={countries.length}
                 itemsPerPage={itemsPerPage}
                 onPageChange={setCurrentPage}
+            />
+
+            <CreateCountryModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onCreate={(data) => {
+                    console.log("Nuevo país:", data);
+                    // aquí luego puedes agregar lógica para guardar en backend o estado
+                }}
+            />
+
+            <EditCountryModal
+                isOpen={isEditModalOpen}
+                onClose={() => {
+                    setIsEditModalOpen(false);
+                    setSelectedCountry(null);
+                }}
+                country={selectedCountry}
+                onUpdate={(data) => {
+                    console.log("Actualizar país:", data);
+                    // aquí luego puedes actualizar estado o backend
+                }}
             />
         </div>
     );

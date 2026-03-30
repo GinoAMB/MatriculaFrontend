@@ -9,6 +9,7 @@ import Role from "../pages/admin/role/Role";
 import Document from "../pages/admin/document/Document";
 import Religion from "../pages/admin/religion/Religion";
 import Country from "../pages/admin/country/Country";
+import State from "../pages/admin/state/State";
 
 export default function AppRouter() {
   return (
@@ -22,7 +23,8 @@ export default function AppRouter() {
         <Route path="/admin/roles" element={<Role />} />
         <Route path="/admin/tipo-documento" element={<Document />} />
         <Route path="/admin/religiones" element={<Religion />} />
-        <Route path="/admin/paises" element={<Country />} />s
+        <Route path="/admin/paises" element={<Country />} />
+        <Route path="/admin/estado-matricula" element={<State />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />
