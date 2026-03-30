@@ -7,6 +7,7 @@ import Dashboard from "../pages/admin/dashboard/Dashboard";
 import User from "../pages/admin/user/User";
 import Role from "../pages/admin/role/Role";
 import Document from "../pages/admin/document/Document";
+import Religion from "../pages/admin/religion/Religion";
 
 export default function AppRouter() {
   return (
@@ -19,6 +20,7 @@ export default function AppRouter() {
         <Route path="/admin/users" element={<User />} />
         <Route path="/admin/roles" element={<Role />} />
         <Route path="/admin/tipo-documento" element={<Document />} />
+        <Route path="/admin/religiones" element={<Religion />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />
