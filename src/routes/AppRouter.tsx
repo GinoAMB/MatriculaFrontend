@@ -10,6 +10,9 @@ import Document from "../pages/admin/document/Document";
 import Religion from "../pages/admin/religion/Religion";
 import Country from "../pages/admin/country/Country";
 import State from "../pages/admin/state/State";
+import Tuition from "../pages/directivo/tuition/Tuition";
+import SchoolTerm from "../pages/directivo/school-year/SchoolTerm";
+import DashboardDirectivo from "../pages/directivo/dashboard/DashboardDirectivo";
 
 export default function AppRouter() {
   return (
@@ -25,6 +28,9 @@ export default function AppRouter() {
         <Route path="/admin/religiones" element={<Religion />} />
         <Route path="/admin/paises" element={<Country />} />
         <Route path="/admin/estado-matricula" element={<State />} />
+        <Route path="/directivo/matricula" element={<Tuition />} />
+        <Route path="/directivo/periodo-academico" element={<SchoolTerm />} />
+        <Route path="/directivo/dashboardDirectivo" element={<DashboardDirectivo />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />

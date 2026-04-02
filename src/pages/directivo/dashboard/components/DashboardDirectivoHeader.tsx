@@ -3,7 +3,7 @@ type Props = {
     subtitle?: string;
 };
 
-export default function DashboardHeader({ title, subtitle }: Props) {
+export default function DashboardDirectivoHeader({ title, subtitle }: Props) {
     return (
         <div>
             <h1 className="text-2xl font-bold text-primary">{title}</h1>
