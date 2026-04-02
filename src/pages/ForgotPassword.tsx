@@ -111,7 +111,7 @@ export default function ForgotPassword() {
 
                     <div className="flex justify-center border-t border-gray-200 py-3">
                         <p className="text-sm text-gray-500 text-center">
-                            <a href="/login" className="text-primary hover:underline">
+                            <a href="/" className="text-primary hover:underline">
                                 Volver al inicio
                             </a>
                         </p>

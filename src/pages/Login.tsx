@@ -30,7 +30,8 @@ export default function Login() {
       <div className="bg-white rounded-lg shadow-lg w-full max-w-6xl h-auto md:h-[90vh] flex flex-col md:flex-row overflow-hidden">
 
         {/* Lado izquierdo */}
-        <div className="w-full md:w-1/2 bg-primary-transparent2 px-6 md:px-16 py-6 md:py-10 flex flex-col justify-start space-y-3 text-center md:text-left">
+{/* Lado izquierdo */}
+<div className="hidden md:flex md:w-1/2 bg-primary-transparent2 px-6 md:px-16 py-6 md:py-10 flex-col justify-start space-y-3 text-center md:text-left">
 
           <div className="flex items-center justify-center md:justify-start space-x-4 py-3 md:py-5">
             <div className="bg-primary w-10 h-10 flex items-center justify-center rounded-md">
