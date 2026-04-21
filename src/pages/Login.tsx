@@ -3,36 +3,43 @@ import { HiAcademicCap, HiEnvelope, HiLockClosed } from "react-icons/hi2";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { PiLeaf } from "react-icons/pi";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/auth/useAuth";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
+  const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const { loginUser, loading } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email || !password) {
+    if (!correo || !password) {
       setError("login_error");
       return;
     }
 
-    console.log({ email, password });
+    try {
+      await loginUser(correo, password);
+      setError(null);
 
-    setError("");
+      // 🔐 redirección después de login
+      navigate("/admin/dashboard");
+    } catch {
+      setError("login_error");
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-100 px-4">
-      {/* Card central */}
       <div className="bg-white rounded-lg shadow-lg w-full max-w-6xl h-auto md:h-[90vh] flex flex-col md:flex-row overflow-hidden">
 
         {/* Lado izquierdo */}
-{/* Lado izquierdo */}
-<div className="hidden md:flex md:w-1/2 bg-primary-transparent2 px-6 md:px-16 py-6 md:py-10 flex-col justify-start space-y-3 text-center md:text-left">
-
+        <div className="hidden md:flex md:w-1/2 bg-primary-transparent2 px-6 md:px-16 py-6 md:py-10 flex-col justify-start space-y-3 text-center md:text-left">
           <div className="flex items-center justify-center md:justify-start space-x-4 py-3 md:py-5">
             <div className="bg-primary w-10 h-10 flex items-center justify-center rounded-md">
               <HiAcademicCap className="text-neutral text-lg" />
@@ -82,39 +89,36 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
+            {/* Email */}
             <div className="flex flex-col">
               <p className="font-semibold text-black/70 text-sm md:text-base">
                 Email
               </p>
 
               <div className="relative">
-                {/* Icono izquierda */}
                 <HiEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
 
-                {/* Input */}
                 <input
                   type="email"
                   placeholder="example@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={correo}
+                  onChange={(e) => setCorreo(e.target.value)}
                   className="w-full p-2 pl-10 pr-10 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary text-sm md:text-base"
                 />
 
-                {/* Icono derecha (hojita) */}
                 <PiLeaf className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 text-lg" />
               </div>
             </div>
 
+            {/* Password */}
             <div className="flex flex-col">
               <p className="font-semibold text-black/70 text-sm md:text-base">
                 Contraseña
               </p>
 
               <div className="relative">
-                {/* Icono izquierda */}
                 <HiLockClosed className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
 
-                {/* Input */}
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="********"
@@ -123,7 +127,6 @@ export default function Login() {
                   className="w-full p-2 pl-10 pr-10 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary text-sm md:text-base"
                 />
 
-                {/* Icono derecha (toggle) */}
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -144,8 +147,14 @@ export default function Login() {
             >
               ¿Olvidaste tu contraseña?
             </Link>
-            <button type="submit" className="btn-primary w-full">
-              Iniciar sesión
+
+            {/* Botón */}
+            <button
+              type="submit"
+              className="btn-primary w-full"
+              disabled={loading}
+            >
+              {loading ? "Cargando..." : "Iniciar sesión"}
             </button>
           </form>
 
@@ -157,17 +166,15 @@ export default function Login() {
           </p>
 
           <div className="border-t border-gray-300 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-0 text-xs md:text-sm text-black/60 pt-4 text-center md:text-left">
-
             <p>© 2026 SAN BARTOLO</p>
 
             <div className="flex gap-4">
               <span className="cursor-pointer hover:underline">PRIVACIDAD</span>
               <span className="cursor-pointer hover:underline">TÉRMINOS</span>
             </div>
-
           </div>
-        </div>
 
+        </div>
       </div>
     </div>
   );

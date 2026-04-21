@@ -2,12 +2,15 @@ import { Outlet } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { FiUser, FiMenu, FiChevronDown } from "react-icons/fi";
+import { clearAuth } from "@/utils/token";
+import { useNavigate } from "react-router-dom";
 
 
 export default function MainLayout() {
   const [open, setOpen] = useState(false);
   const [userMenu, setUserMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -86,7 +89,11 @@ export default function MainLayout() {
                 </button>
 
                 <button
-                  onClick={() => setUserMenu(false)}
+                  onClick={() => {
+                    clearAuth();
+                    setUserMenu(false);
+                    navigate("/");
+                  }}
                   className="w-full text-left px-4 py-2 text-red-500 hover:bg-red-50 cursor-pointer"
                 >
                   Cerrar sesión
