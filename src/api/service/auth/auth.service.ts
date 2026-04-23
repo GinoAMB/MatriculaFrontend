@@ -1,4 +1,4 @@
-import api from "../axios";
+import api from "../../axios";
 import { setToken } from "@/utils/token";
 import { API_ENDPOINTS } from "@/api/endpoints";
 

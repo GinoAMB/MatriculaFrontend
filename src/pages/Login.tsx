@@ -19,7 +19,7 @@ export default function Login() {
     e.preventDefault();
 
     if (!correo || !password) {
-      setError("login_error");
+      setError("empty_fields");
       return;
     }
 
@@ -27,7 +27,6 @@ export default function Login() {
       await loginUser(correo, password);
       setError(null);
 
-      // 🔐 redirección después de login
       navigate("/admin/dashboard");
     } catch {
       setError("login_error");
@@ -72,6 +71,20 @@ export default function Login() {
               Plataforma de Matrícula. Por favor ingrese sus credenciales para continuar.
             </p>
           </div>
+
+          {error === "empty_fields" && (
+            <div className="p-3 flex items-start gap-3 bg-yellow-500/10 border-l-4 border-yellow-600">
+              <AiOutlineExclamationCircle className="text-yellow-600 text-xl" />
+              <div>
+                <p className="font-semibold text-yellow-700 text-sm md:text-base">
+                  Debes completar todos los campos
+                </p>
+                <p className="text-xs md:text-sm text-yellow-700/80">
+                  Ingresa tu correo y contraseña para continuar
+                </p>
+              </div>
+            </div>
+          )}
 
           {error === "login_error" && (
             <div className="p-3 flex items-start gap-3 bg-red-600/10 border-l-4 border-red-900">
@@ -140,13 +153,14 @@ export default function Login() {
                 </button>
               </div>
             </div>
-
-            <Link
-              to="/forgot-password"
-              className="text-sm text-primary cursor-pointer hover:underline text-right"
-            >
-              ¿Olvidaste tu contraseña?
-            </Link>
+            <div className="flex justify-end">
+              <Link
+                to="/forgot-password"
+                className="text-sm text-primary cursor-pointer hover:underline text-right"
+              >
+                ¿Olvidaste tu contraseña?
+              </Link>
+            </div>
 
             {/* Botón */}
             <button

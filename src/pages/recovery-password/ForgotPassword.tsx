@@ -1,9 +1,27 @@
 import { HiAcademicCap, HiEnvelope } from "react-icons/hi2";
-import ColegioFondo from "../assets/ie-88320-san-bartolo.jpg"
+import ColegioFondo from "../../assets/ie-88320-san-bartolo.jpg"
 import { MdSecurity, MdOutlineSupportAgent } from "react-icons/md";
 import { PiLeaf } from "react-icons/pi";
+import { useState } from "react";
+import { useRecovery } from "@/hooks/password-recovery/useRecovery";
 
 export default function ForgotPassword() {
+    const [correo, setCorreo] = useState("");
+    const { recoverPassword, loading, error, success, message } = useRecovery();
+    const [formError, setFormError] = useState<string | null>(null);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!correo.trim()) {
+            setFormError("El correo es obligatorio");
+            return;
+        }
+
+        setFormError(null);
+        await recoverPassword(correo);
+    };
+
     return (
         <div className="min-h-screen flex bg-neutral">
 
@@ -79,7 +97,7 @@ export default function ForgotPassword() {
                     </p>
 
                     {/* Formulario */}
-                    <form className="flex flex-col gap-4 text-left">
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-left">
                         <div className="flex flex-col gap-1">
                             <label className="text-xs font-semibold text-gray-700">
                                 Correo electrónico
@@ -93,20 +111,33 @@ export default function ForgotPassword() {
                                 <input
                                     type="email"
                                     placeholder="example@email.com"
+                                    value={correo}
+                                    onChange={(e) => setCorreo(e.target.value)}
                                     className="border border-gray-300 rounded-md px-10 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary"
                                 />
 
                                 {/* Icono derecha */}
                                 <PiLeaf className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 text-lg" />
                             </div>
+                            {formError && (
+                                <p className="text-red-500 text-xs">{formError}</p>
+                            )}
                         </div>
 
                         <button
                             type="submit"
+                            disabled={loading}
                             className="btn-primary text-sm"
                         >
-                            Enviar enlace de recuperación
+                            {loading ? "Enviando..." : "Enviar enlace de recuperación"}
                         </button>
+                        {error && (
+                            <p className="text-red-500 text-sm">{error}</p>
+                        )}
+
+                        {success && (
+                            <p className="text-green-600 text-sm">{message}</p>
+                        )}
                     </form>
 
                     <div className="flex justify-center border-t border-gray-200 py-3">

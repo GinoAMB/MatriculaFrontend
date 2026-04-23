@@ -1,7 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import Login from "../pages/Login";
 import NotFound from "../pages/NotFound";
-import ForgotPassword from "../pages/ForgotPassword";
+import ForgotPassword from "../pages/recovery-password/ForgotPassword";
+import ResetPassword from "../pages/recovery-password/ResetPassword";
 import MainLayout from "../layouts/MainLayout";
 import Dashboard from "../pages/admin/dashboard/Dashboard";
 import User from "../pages/admin/user/User";
@@ -19,6 +20,7 @@ export default function AppRouter() {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
 
       <Route element={<MainLayout />}>
         <Route path="/admin/dashboard" element={<Dashboard />} />

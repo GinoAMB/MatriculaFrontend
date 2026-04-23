@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { login } from "@/api/service/auth.service";
+import { login } from "@/api/service/auth/auth.service";
 
 export const useAuth = () => {
   const [loading, setLoading] = useState(false);
