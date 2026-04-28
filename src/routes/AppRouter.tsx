@@ -4,16 +4,16 @@ import NotFound from "../pages/NotFound";
 import ForgotPassword from "../pages/recovery-password/ForgotPassword";
 import ResetPassword from "../pages/recovery-password/ResetPassword";
 import MainLayout from "../layouts/MainLayout";
-import Dashboard from "../pages/admin/dashboard/Dashboard";
-import User from "../pages/admin/user/User";
-import Role from "../pages/admin/role/Role";
-import Document from "../pages/admin/document/Document";
-import Religion from "../pages/admin/religion/Religion";
-import Country from "../pages/admin/country/Country";
-import State from "../pages/admin/state/State";
-import Tuition from "../pages/directivo/tuition/Tuition";
-import SchoolTerm from "../pages/directivo/school-year/SchoolTerm";
-import DashboardDirectivo from "../pages/directivo/dashboard/DashboardDirectivo";
+import Dashboard from "../pages/dashboard-admin/Dashboard";
+import User from "../pages/user/User";
+import Role from "../pages/role/Role";
+import Document from "../pages/document/Document";
+import Religion from "../pages/religion/Religion";
+import Country from "../pages/country/Country";
+import State from "../pages/state/State";
+import Tuition from "../pages/tuition/Tuition";
+import SchoolTerm from "../pages/school-year/SchoolTerm";
+import DashboardDirectivo from "../pages/dashboard/DashboardDirectivo";
 
 export default function AppRouter() {
   return (
