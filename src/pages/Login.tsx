@@ -5,6 +5,7 @@ import { PiLeaf } from "react-icons/pi";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/auth/useAuth";
+import { getRole } from "@/utils/auth";
 
 export default function Login() {
   const [correo, setCorreo] = useState("");
@@ -14,6 +15,9 @@ export default function Login() {
 
   const { loginUser, loading } = useAuth();
   const navigate = useNavigate();
+
+  const role = getRole();
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +31,14 @@ export default function Login() {
       await loginUser(correo, password);
       setError(null);
 
-      navigate("/admin/dashboard");
+      if (role === "ADMIN") {
+        navigate("/admin/dashboard");
+      } else if (role === "DIRECTIVO") {
+        navigate("/directivo/dashboardDirectivo");
+      } else {
+        navigate("/");
+      }
+
     } catch {
       setError("login_error");
     }

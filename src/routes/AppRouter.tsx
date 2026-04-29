@@ -15,6 +15,8 @@ import Tuition from "../pages/tuition/Tuition";
 import SchoolTerm from "../pages/school-year/SchoolTerm";
 import DashboardDirectivo from "../pages/dashboard/DashboardDirectivo";
 
+import ProtectedRoute from "./ProtectedRoute";
+
 export default function AppRouter() {
   return (
     <Routes>
@@ -22,17 +24,24 @@ export default function AppRouter() {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
 
-      <Route element={<MainLayout />}>
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-        <Route path="/admin/users" element={<User />} />
-        <Route path="/admin/roles" element={<Role />} />
-        <Route path="/admin/tipo-documento" element={<Document />} />
-        <Route path="/admin/religiones" element={<Religion />} />
-        <Route path="/admin/paises" element={<Country />} />
-        <Route path="/admin/estado-matricula" element={<State />} />
-        <Route path="/directivo/matricula" element={<Tuition />} />
-        <Route path="/directivo/periodo-academico" element={<SchoolTerm />} />
-        <Route path="/directivo/dashboardDirectivo" element={<DashboardDirectivo />} />
+      <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
+        <Route element={<MainLayout />}>
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+          <Route path="/admin/users" element={<User />} />
+          <Route path="/admin/roles" element={<Role />} />
+          <Route path="/admin/tipo-documento" element={<Document />} />
+          <Route path="/admin/religiones" element={<Religion />} />
+          <Route path="/admin/paises" element={<Country />} />
+          <Route path="/admin/estado-matricula" element={<State />} />
+        </Route>
+      </Route>
+
+      <Route element={<ProtectedRoute allowedRoles={["DIRECTIVO"]} />}>
+        <Route element={<MainLayout />}>
+          <Route path="/directivo/matricula" element={<Tuition />} />
+          <Route path="/directivo/periodo-academico" element={<SchoolTerm />} />
+          <Route path="/directivo/dashboardDirectivo" element={<DashboardDirectivo />} />
+        </Route>
       </Route>
 
       <Route path="*" element={<NotFound />} />
