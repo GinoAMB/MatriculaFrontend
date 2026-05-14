@@ -1,27 +1,32 @@
 import { useState } from "react";
 import { FiMail, FiLock } from "react-icons/fi";
 import { FiUser } from "react-icons/fi";
+import type { Role } from "@/type/role/rol.type";
 
 type Props = {
     isOpen: boolean;
     onClose: () => void;
+
+    roles: Role[];
+    loadingRoles: boolean;
+
+    loading: boolean;
+
     onCreate: (data: {
         name: string;
         lastname: string;
         email: string;
         password: string;
-        status: boolean;
         role: string;
     }) => void;
 };
 
-export default function CreateUserModal({ isOpen, onClose, onCreate }: Props) {
+export default function CreateUserModal({ isOpen, onClose, onCreate, roles, loadingRoles, loading }: Props) {
     const [form, setForm] = useState({
         name: "",
         lastname: "",
         email: "",
         password: "",
-        status: true,
         role: "",
     });
 
@@ -45,7 +50,6 @@ export default function CreateUserModal({ isOpen, onClose, onCreate }: Props) {
             lastname: "",
             email: "",
             password: "",
-            status: true,
             role: "",
         });
     };
@@ -129,15 +133,32 @@ export default function CreateUserModal({ isOpen, onClose, onCreate }: Props) {
                                 <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
 
                                 <select
+                                    name="role"
+                                    value={form.role}
+                                    onChange={(e) =>
+                                        setForm({
+                                            ...form,
+                                            role: e.target.value,
+                                        })
+                                    }
                                     className="bg-gray-100 p-2 pl-9 rounded text-sm w-full appearance-none"
-                                    defaultValue=""
                                 >
                                     <option value="" disabled>
                                         Seleccione un rol
                                     </option>
-                                    <option>Administrador</option>
-                                    <option>Usuario</option>
-                                    <option>Editor</option>
+
+                                    {loadingRoles ? (
+                                        <option disabled>Cargando roles...</option>
+                                    ) : (
+                                        roles.map((rol) => (
+                                            <option
+                                                key={rol.idRol}
+                                                value={rol.idRol}
+                                            >
+                                                {rol.nombre}
+                                            </option>
+                                        ))
+                                    )}
                                 </select>
                             </div>
                         </div>
@@ -166,41 +187,6 @@ export default function CreateUserModal({ isOpen, onClose, onCreate }: Props) {
                                 MINIMO 8 CARACTERES, INCLUYE UN NÚMERO Y UN SIMBOLO.
                             </span>
                         </div>
-
-                        {/* Toggle */}
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-gray-100 p-3 rounded">
-                            <div>
-                                <p className="font-semibold text-gray-700 text-sm">
-                                    Estado de la cuenta
-                                </p>
-                                <p className="text-xs text-gray-400">
-                                    Define si el usuario tendrá acceso inmediato.
-                                </p>
-                            </div>
-
-                            <div className="flex items-center gap-3">
-
-                                <label className="relative inline-flex items-center cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        name="status"
-                                        checked={form.status}
-                                        onChange={handleChange}
-                                        className="sr-only peer"
-                                    />
-                                    <div className="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-primary transition-colors duration-300"></div>
-                                    <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 peer-checked:translate-x-5"></div>
-                                </label>
-
-                                <span
-                                    className={`text-sm font-semibold ${form.status ? "text-primary" : "text-gray-400"
-                                        }`}
-                                >
-                                    {form.status ? "Activo" : "Inactivo"}
-                                </span>
-                            </div>
-                        </div>
-
                         {/* Botones */}
                         <div className="flex flex-col sm:flex-row gap-2 py-4 w-full">
                             <button
@@ -213,9 +199,10 @@ export default function CreateUserModal({ isOpen, onClose, onCreate }: Props) {
 
                             <button
                                 type="submit"
-                                className="btn-primary w-full"
+                                disabled={loading}
+                                className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                Guardar Usuario
+                                {loading ? "Guardando..." : "Guardar Usuario"}
                             </button>
                         </div>
                     </form>

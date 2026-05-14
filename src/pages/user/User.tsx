@@ -1,115 +1,208 @@
+import { useCallback, useState } from "react";
 import UserHeader from "./components/UserHeader";
 import UserFilters from "./components/UserFilters";
 import UserList from "./components/UserList";
 import Pagination from "@/components/Pagination";
-import { useState } from "react";
 import CreateUserModal from "./modals/CreateUserModal";
 import EditUserModal from "./modals/EditUserModal";
+import Loader from "@/components/Loader";
+
+import { useRoles } from "@/hooks/role/useRoles";
+import { useUsuarios } from "@/hooks/user/useUsuarios";
+import { useCreateUsuario } from "@/hooks/user/useCreateUsuario";
+import { useChangeStatusUsuario } from "@/hooks/user/useChangeStatusUsuario";
+import { useUpdateUser } from "@/hooks/user/useUpdateUser";
+
+import type { Usuario, UsuarioFiltros } from "@/type/user/user.type";
+
+import { showSuccess, showError } from "@/utils/toast";
 
 export default function User() {
-    type User = {
-        id: number;
-        name: string;
-        email: string;
-        role: string;
-        status: "Activo" | "Inactivo";
-    };
+    const [filtros, setFiltros] = useState<UsuarioFiltros>({
+        page: 0,
+        size: 10,
+    });
 
-    const users: User[] = [
-        { id: 1, name: "Juan Pérez", email: "juan@email.com", role: "Admin", status: "Activo" },
-        { id: 2, name: "María López", email: "maria@email.com", role: "Docente", status: "Inactivo" },
-        { id: 3, name: "Carlos Ramírez", email: "carlos@email.com", role: "Admin", status: "Activo" },
-        { id: 4, name: "Ana Torres", email: "ana@email.com", role: "Docente", status: "Activo" },
-        { id: 5, name: "Luis García", email: "luis@email.com", role: "Docente", status: "Inactivo" },
-        { id: 6, name: "Sofía Herrera", email: "sofia@email.com", role: "Admin", status: "Activo" },
-        { id: 7, name: "Diego Flores", email: "diego@email.com", role: "Docente", status: "Activo" },
-        { id: 8, name: "Lucía Castro", email: "lucia@email.com", role: "Docente", status: "Inactivo" },
-        { id: 9, name: "Pedro Sánchez", email: "pedro@email.com", role: "Admin", status: "Activo" },
-        { id: 10, name: "Valeria Rojas", email: "valeria@email.com", role: "Docente", status: "Activo" },
-        { id: 11, name: "Jorge Mendoza", email: "jorge@email.com", role: "Admin", status: "Inactivo" },
-        { id: 12, name: "Camila Navarro", email: "camila@email.com", role: "Docente", status: "Activo" },
-        { id: 13, name: "Andrés Vega", email: "andres@email.com", role: "Docente", status: "Activo" },
-        { id: 14, name: "Paula Ortiz", email: "paula@email.com", role: "Admin", status: "Inactivo" },
-        { id: 15, name: "Fernando Ruiz", email: "fernando@email.com", role: "Docente", status: "Activo" },
-        { id: 16, name: "Daniela Paredes", email: "daniela@email.com", role: "Admin", status: "Activo" },
-        { id: 17, name: "Miguel Chávez", email: "miguel@email.com", role: "Docente", status: "Inactivo" },
-        { id: 18, name: "Renata Silva", email: "renata@email.com", role: "Docente", status: "Activo" },
-        { id: 19, name: "Ricardo León", email: "ricardo@email.com", role: "Admin", status: "Activo" },
-        { id: 20, name: "Elena Vargas", email: "elena@email.com", role: "Docente", status: "Activo" },
-    ];
+    const { usuarios, loading, totalPages, totalElements, recargar } =
+        useUsuarios(filtros);
 
-    const handleSearch = (filters: {
+    const { roles, loading: loadingRoles } = useRoles();
+
+    const {
+        createUser,
+        loading: loadingCreate,
+    } = useCreateUsuario();
+
+    const {
+        changeStatus,
+        loading: loadingStatus,
+    } = useChangeStatusUsuario();
+
+    const {
+        updateUser,
+        loading: loadingUpdate,
+    } = useUpdateUser();
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+    const [selectedUser, setSelectedUser] = useState<Usuario | null>(null);
+
+    const handleSearch = useCallback((filters: {
         search: string;
         role: string;
         status: string;
     }) => {
-        console.log("Filtros:", filters);
-    };
+        const nuevoFiltro: UsuarioFiltros = {
+            page: 0,
+            size: 10,
+            search: filters.search.trim() || undefined,
+            rol: filters.role || undefined,
+            estado:
+                filters.status === ""
+                    ? undefined
+                    : filters.status === "activo",
+        };
 
-    const handleToggleStatus = (user: any) => {
-        console.log("Cambiar estado:", user);
-    };
+        setFiltros((prev) => {
+            const same =
+                prev.page === nuevoFiltro.page &&
+                prev.size === nuevoFiltro.size &&
+                prev.search === nuevoFiltro.search &&
+                prev.rol === nuevoFiltro.rol &&
+                prev.estado === nuevoFiltro.estado;
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
-
-    const totalPages = Math.ceil(users.length / itemsPerPage);
-
-    const paginatedUsers = users.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-    );
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const handleCreateUser = (data: any) => {
-        console.log("Usuario creado:", data);
-    };
-
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [selectedUser, setSelectedUser] = useState<any>(null);
-
-    const handleEdit = (user: any) => {
-        setSelectedUser({
-            ...user,
-            lastname: user.name.split(" ").slice(1).join(" "), // opcional si no tienes lastname
+            return same ? prev : nuevoFiltro;
         });
+    }, []);
+
+    const handlePageChange = useCallback((page: number) => {
+        setFiltros((prev) => {
+            const nuevaPagina = page - 1;
+
+            if (prev.page === nuevaPagina) return prev;
+
+            return {
+                ...prev,
+                page: nuevaPagina,
+            };
+        });
+    }, []);
+
+    const handleToggleStatus = async (user: Usuario) => {
+        try {
+            await changeStatus(user.idUsuario);
+
+            await recargar();
+
+            const nuevoEstado = user.estado
+                ? "desactivado"
+                : "activado";
+
+            showSuccess(
+                `Usuario ${nuevoEstado} correctamente`
+            );
+        } catch (error) {
+            showError("No se pudo cambiar el estado");
+        }
+    };
+
+    const handleCreateUser = async (data: {
+        name: string;
+        lastname: string;
+        email: string;
+        password: string;
+        role: string;
+    }) => {
+        try {
+            await createUser({
+                nombre: data.name,
+                apellidos: data.lastname,
+                correo: data.email,
+                password: data.password,
+                idRol: Number(data.role),
+            });
+
+            await recargar();
+
+            showSuccess("Usuario creado correctamente");
+
+            setIsModalOpen(false);
+        } catch (error) {
+            showError("Error al crear el usuario");
+        }
+    };
+
+    const handleEdit = (user: Usuario) => {
+        setSelectedUser(user);
         setIsEditModalOpen(true);
     };
 
-    const handleUpdateUser = (data: any) => {
-        console.log("Usuario actualizado:", data);
+    const handleUpdateUser = async (data: any) => {
+        try {
+
+            const payload = {
+                nombre: data.nombre,
+                apellidos: data.apellidos,
+                correo: data.correo,
+                idRol: Number(data.idRol),
+                password: data.password,
+                estado: data.estado,
+            };
+
+            await updateUser(data.idUsuario, payload);
+
+            await recargar();
+
+            showSuccess("Usuario actualizado correctamente");
+
+            setIsEditModalOpen(false);
+
+        } catch (error) {
+            showError("Error al actualizar usuario");
+        }
     };
 
     return (
         <div className="flex flex-col gap-3">
             <UserHeader
                 title="Gestión de usuarios"
-                subtitle="Administre el personal academico, administrativo y los roles de acceso para la IE 33280 San Bartolo."
+                subtitle="Administre el personal académico, administrativo y los roles de acceso."
                 onNewUser={() => setIsModalOpen(true)}
             />
 
-            <UserFilters onSearch={handleSearch} />
-
-
-            <UserList
-                users={paginatedUsers}
-                onEdit={handleEdit}
-                onToggleStatus={handleToggleStatus}
+            <UserFilters
+                onSearch={handleSearch}
+                roles={roles}
+                loadingRoles={loadingRoles}
             />
 
+            {loading ? (
+                <Loader />
+            ) : (
+                <UserList
+                    users={usuarios}
+                    onEdit={handleEdit}
+                    onToggleStatus={handleToggleStatus}
+                    loadingStatus={loadingStatus}
+                />
+            )}
+
             <Pagination
-                currentPage={currentPage}
+                currentPage={(filtros.page ?? 0) + 1}
                 totalPages={totalPages}
-                totalItems={users.length}
-                itemsPerPage={itemsPerPage}
-                onPageChange={setCurrentPage}
+                totalItems={totalElements}
+                itemsPerPage={filtros.size ?? 10}
+                onPageChange={handlePageChange}
             />
 
             <CreateUserModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onCreate={handleCreateUser}
+                roles={roles}
+                loadingRoles={loadingRoles}
+                loading={loadingCreate}
             />
 
             <EditUserModal
@@ -117,6 +210,9 @@ export default function User() {
                 onClose={() => setIsEditModalOpen(false)}
                 user={selectedUser}
                 onUpdate={handleUpdateUser}
+                loading={loadingUpdate}
+                roles={roles}
+                loadingRoles={loadingRoles}
             />
         </div>
     );

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { IoMdRefresh } from "react-icons/io";
+import type { Role } from "@/type/role/rol.type";
 
 type Props = {
     onSearch: (filters: {
@@ -7,16 +8,23 @@ type Props = {
         role: string;
         status: string;
     }) => void;
+
+    roles: Role[];
+    loadingRoles: boolean;
 };
 
-export default function UserFilters({ onSearch }: Props) {
+export default function UserFilters({ onSearch, roles, loadingRoles }: Props) {
     const [search, setSearch] = useState("");
     const [role, setRole] = useState("");
     const [status, setStatus] = useState("");
 
     useEffect(() => {
-        onSearch({ search, role, status });
-    }, [search, role, status]);
+        const timeout = setTimeout(() => {
+            onSearch({ search, role, status });
+        }, 400);
+
+        return () => clearTimeout(timeout);
+    }, [search, role, status, onSearch]);
 
     const handleClear = () => {
         setSearch("");
@@ -26,7 +34,7 @@ export default function UserFilters({ onSearch }: Props) {
 
     return (
         <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-end bg-white p-3 rounded-lg shadow w-full">
-            
+
             {/* Input */}
             <input
                 type="text"
@@ -44,9 +52,19 @@ export default function UserFilters({ onSearch }: Props) {
                     className="w-full sm:w-[180px] border border-gray-300 rounded-xl px-3 py-2 text-sm"
                 >
                     <option value="">Todos</option>
-                    <option value="admin">Administrador</option>
-                    <option value="docente">Docente</option>
-                    <option value="auxiliar">Auxiliar</option>
+
+                    {loadingRoles ? (
+                        <option disabled>Cargando...</option>
+                    ) : (
+                        roles.map((rol) => (
+                            <option
+                                key={rol.idRol}
+                                value={rol.nombre}
+                            >
+                                {rol.nombre}
+                            </option>
+                        ))
+                    )}
                 </select>
 
                 <select
