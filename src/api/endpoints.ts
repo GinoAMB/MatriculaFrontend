@@ -13,5 +13,7 @@ export const API_ENDPOINTS = {
   },
   ROLE: {
     LISTA: "/rol",
+    UPDATE: "/rol/update",
+    CREATE: "/rol/register",
   },
 };

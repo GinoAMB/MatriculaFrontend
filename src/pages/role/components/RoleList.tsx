@@ -1,9 +1,6 @@
 import { HiOutlinePencil } from "react-icons/hi";
 
-type Role = {
-    id: number;
-    name: string;
-};
+import type { Role } from "@/type/role/rol.type";
 
 type Props = {
     role: Role[];
@@ -25,15 +22,15 @@ export default function RoleList({ role, onEdit }: Props) {
 
                 <tbody>
                     {role.map((role) => (
-                        <tr key={role.id}>
-                            <td className="px-5 text-xs text-gray-400 hidden sm:table-cell"># {role.id}</td>
+                        <tr key={role.idRol}>
+                            <td className="px-5 text-xs text-gray-400 hidden sm:table-cell"># {role.idRol}</td>
                             <td className="px-5 ">
                                 <div className="flex flex-col">
-                                    <span>{role.name}</span>
+                                    <span>{role.nombre}</span>
 
                                     {/* ID solo en móvil */}
                                     <span className="text-xs text-gray-400 sm:hidden">
-                                        #{role.id}
+                                        #{role.idRol}
                                     </span>
                                 </div>
                             </td>

@@ -1,27 +1,49 @@
 import { useState } from "react";
+
 import RoleHeader from "./components/RoleHeader";
 import RoleList from "./components/RoleList";
 import CreateRoleModal from "./modals/CreateRoleModal";
 import EditRoleModal from "./modals/EditRoleModal";
 import Pagination from "@/components/Pagination";
+import Loader from "@/components/Loader";
+
+import { useRoles } from "@/hooks/role/useRoles";
+import { useUpdateRole } from "@/hooks/role/useUpdateRole";
+import { useCreateRole } from "@/hooks/role/useCreateRole";
+
+import type { Role } from "@/type/role/rol.type";
+
+import { showSuccess, showError } from "@/utils/toast";
 
 export default function RolePage() {
-    type Role = {
-        id: number;
-        name: string;
-    };
-    const roles: Role[] = [
-        { id: 1, name: "Admin" },
-        { id: 2, name: "Docente" },
-        { id: 3, name: "Estudiante" },
-        { id: 4, name: "Coordinador" },
-        { id: 5, name: "Secretaria" },
-    ];
+
+    const { roles, loading, error, recargar } = useRoles();
+    const { actualizarRol, loading: updating } = useUpdateRole();
+    const { crearRol, loading: creating } = useCreateRole();
 
     const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
 
-    const handleCreateRole = (data: any) => {
-        console.log("Rol creado:", data);
+    const handleCreateRole = async (data: { name: string }) => {
+
+        try {
+
+            const response = await crearRol({
+                nombre: data.name,
+            });
+
+            if (response) {
+
+                await recargar();
+
+                showSuccess("Rol creado correctamente");
+
+                setIsRoleModalOpen(false);
+            }
+
+        } catch (error) {
+
+            showError("Error al crear el rol");
+        }
     };
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -32,11 +54,32 @@ export default function RolePage() {
         setIsEditModalOpen(true);
     };
 
-    const handleUpdateRole = (updatedRole: Role) => {
-        console.log("Rol actualizado:", updatedRole);
+    const handleUpdateRole = async (updatedRole: Role) => {
+
+        try {
+
+            const response = await actualizarRol({
+                idRol: updatedRole.idRol,
+                nombre: updatedRole.nombre,
+            });
+
+            if (response) {
+
+                await recargar();
+
+                showSuccess("Rol actualizado correctamente");
+
+                setIsEditModalOpen(false);
+            }
+
+        } catch (error) {
+
+            showError("Error al actualizar el rol");
+        }
     };
 
     const [currentPage, setCurrentPage] = useState(1);
+
     const itemsPerPage = 10;
 
     const totalPages = Math.ceil(roles.length / itemsPerPage);
@@ -45,29 +88,45 @@ export default function RolePage() {
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
+
+    // 🔹 Error
+    if (error) {
+        return <p>{error}</p>;
+    }
+
     return (
         <div className="flex flex-col gap-3">
+
             <RoleHeader
                 title="Gestión de Roles"
                 subtitle="Define y administra los niveles de acceso para el personal de la institución."
                 onNewRole={() => setIsRoleModalOpen(true)}
             />
-            <RoleList
-                role={paginatedRoles}
-                onEdit={handleEditRole}
-            />
 
-            <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                totalItems={roles.length}
-                itemsPerPage={itemsPerPage}
-                onPageChange={setCurrentPage}
-            />
+            {loading ? (
+                <Loader />
+            ) : (
+                <RoleList
+                    role={paginatedRoles}
+                    onEdit={handleEditRole}
+                />
+            )}
+
+            {!loading && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    totalItems={roles.length}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={setCurrentPage}
+                />
+            )}
+
             <CreateRoleModal
                 isOpen={isRoleModalOpen}
                 onClose={() => setIsRoleModalOpen(false)}
                 onCreate={handleCreateRole}
+                loading={creating}
             />
 
             <EditRoleModal
@@ -75,6 +134,7 @@ export default function RolePage() {
                 onClose={() => setIsEditModalOpen(false)}
                 role={selectedRole}
                 onUpdate={handleUpdateRole}
+                loading={updating}
             />
 
         </div>

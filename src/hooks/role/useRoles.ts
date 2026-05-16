@@ -1,36 +1,44 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 import { obtenerRoles } from "@/api/service/role/role.service";
 
 import type { Role } from "@/type/role/rol.type";
 
 export const useRoles = () => {
+
     const [roles, setRoles] = useState<Role[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchRoles = async () => {
-            try {
-                setLoading(true);
+    const cargarRoles = useCallback(async () => {
 
-                const data = await obtenerRoles();
+        try {
+            setLoading(true);
+            setError(null);
 
-                setRoles(data);
-            } catch (err) {
-                console.error(err);
-                setError("Error al obtener los roles");
-            } finally {
-                setLoading(false);
-            }
-        };
+            const data = await obtenerRoles();
 
-        fetchRoles();
+            setRoles(data);
+
+        } catch (err) {
+
+            console.error(err);
+            setError("Error al obtener los roles");
+
+        } finally {
+            setLoading(false);
+        }
+
     }, []);
+
+    useEffect(() => {
+        cargarRoles();
+    }, [cargarRoles]);
 
     return {
         roles,
         loading,
         error,
+        recargar: cargarRoles,
     };
 };
