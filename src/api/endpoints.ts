@@ -16,4 +16,9 @@ export const API_ENDPOINTS = {
     UPDATE: "/rol/update",
     CREATE: "/rol/register",
   },
+  COUNTRY: {
+    LISTA: "/pais",
+    CREAR: "/pais/register",
+    UPDATE: "/pais/update",
+  },
 };

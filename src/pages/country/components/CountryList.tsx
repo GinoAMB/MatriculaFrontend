@@ -1,9 +1,7 @@
 import { HiOutlinePencil } from "react-icons/hi";
 
-type Country = {
-    id: number;
-    name: string;
-};
+import type { Country } from "@/type/country/country.type";
+
 
 type Props = {
     countries: Country[];
@@ -25,15 +23,15 @@ export default function CountryList({ countries, onEdit }: Props) {
 
                 <tbody>
                     {countries.map((country) => (
-                        <tr key={country.id}>
-                            <td className="px-5 text-xs text-gray-400 hidden sm:table-cell"># {country.id}</td>
+                        <tr key={country.idPais}>
+                            <td className="px-5 text-xs text-gray-400 hidden sm:table-cell"># {country.idPais}</td>
                             <td className="px-5 ">
                                 <div className="flex flex-col">
-                                    <span>{country.name}</span>
+                                    <span>{country.nombre}</span>
 
                                     {/* ID solo en móvil */}
                                     <span className="text-xs text-gray-400 sm:hidden">
-                                        #{country.id}
+                                        #{country.idPais}
                                     </span>
                                 </div>
                             </td>
