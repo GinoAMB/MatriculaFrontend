@@ -1,9 +1,6 @@
 import { HiOutlinePencil } from "react-icons/hi";
 
-type Religion = {
-    id: number;
-    name: string;
-};
+import type { Religion } from "@/type/religion/religion.type";
 
 type Props = {
     religion: Religion[];
@@ -25,15 +22,15 @@ export default function ReligionList({ religion, onEdit }: Props) {
 
                 <tbody>
                     {religion.map((religion) => (
-                        <tr key={religion.id}>
-                            <td className="px-5 text-xs text-gray-400 hidden sm:table-cell"># {religion.id}</td>
+                        <tr key={religion.idReligion}>
+                            <td className="px-5 text-xs text-gray-400 hidden sm:table-cell"># {religion.idReligion}</td>
                             <td className="px-5 ">
                                 <div className="flex flex-col">
-                                    <span>{religion.name}</span>
+                                    <span>{religion.nombre}</span>
 
                                     {/* ID solo en móvil */}
                                     <span className="text-xs text-gray-400 sm:hidden">
-                                        #{religion.id}
+                                        #{religion.idReligion}
                                     </span>
                                 </div>
                             </td>

@@ -26,4 +26,9 @@ export const API_ENDPOINTS = {
     CREAR: "/documento/register",
     UPDATE: "/documento/update",
   },
+  RELIGION: {
+    LISTA: "/religion",
+    CREAR: "/religion/register",
+    UPDATE: "/religion/update",
+  },
 };
