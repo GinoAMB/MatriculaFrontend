@@ -9,7 +9,7 @@ import {
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import { FaHouseMedicalCircleExclamation } from "react-icons/fa6";
-import { FaListCheck, FaUserPlus } from "react-icons/fa6";
+import { FaUserPlus } from "react-icons/fa6";
 import { FiChevronDown } from "react-icons/fi";
 import { FaUserCog } from "react-icons/fa";
 import { LuUserRoundCog } from "react-icons/lu";
@@ -159,14 +159,6 @@ export default function Navbar({ open, setOpen }: any) {
                   >
                     <FiGlobe />
                     Países
-                  </NavLink>
-
-                  <NavLink
-                    to="/admin/estado-matricula"
-                    className={({ isActive }) => navLinkClass(isActive)}
-                  >
-                    <FaListCheck />
-                    Estados de Matrícula
                   </NavLink>
                 </div>
               )}

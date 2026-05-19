@@ -10,7 +10,6 @@ import Role from "../pages/role/Role";
 import Document from "../pages/document/Document";
 import Religion from "../pages/religion/Religion";
 import Country from "../pages/country/Country";
-import State from "../pages/state/State";
 import Tuition from "../pages/tuition/Tuition";
 import SchoolTerm from "../pages/school-year/SchoolTerm";
 import DashboardDirectivo from "../pages/dashboard/DashboardDirectivo";
@@ -32,7 +31,6 @@ export default function AppRouter() {
           <Route path="/admin/tipo-documento" element={<Document />} />
           <Route path="/admin/religiones" element={<Religion />} />
           <Route path="/admin/paises" element={<Country />} />
-          <Route path="/admin/estado-matricula" element={<State />} />
         </Route>
       </Route>
 
