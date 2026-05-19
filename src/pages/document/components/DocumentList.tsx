@@ -1,13 +1,9 @@
 import { HiOutlinePencil } from "react-icons/hi";
-
-type Document = {
-    id: number;
-    name: string;
-};
+import type { DocumentType } from "@/type/document/document.type";
 
 type Props = {
-    document: Document[];
-    onEdit: (document: Document) => void;
+    document: DocumentType[];
+    onEdit: (document: DocumentType) => void;
 };
 
 export default function DocumentList({ document, onEdit }: Props) {
@@ -25,15 +21,15 @@ export default function DocumentList({ document, onEdit }: Props) {
 
                 <tbody>
                     {document.map((document) => (
-                        <tr key={document.id}>
-                            <td className="px-5 text-xs text-gray-400 hidden sm:table-cell"># {document.id}</td>
+                        <tr key={document.idTipo}>
+                            <td className="px-5 text-xs text-gray-400 hidden sm:table-cell"># {document.idTipo}</td>
                             <td className="px-5 ">
                                 <div className="flex flex-col">
-                                    <span>{document.name}</span>
+                                    <span>{document.nombre}</span>
 
                                     {/* ID solo en móvil */}
                                     <span className="text-xs text-gray-400 sm:hidden">
-                                        #{document.id}
+                                        #{document.idTipo}
                                     </span>
                                 </div>
                             </td>
