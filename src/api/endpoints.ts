@@ -34,4 +34,9 @@ export const API_ENDPOINTS = {
   STATE: {
     LISTA: "/estadoMatricula",
   },
+  PERIODO: {
+    LISTA: "/periodo-escolar",
+    CREAR: "/periodo-escolar/register",
+    UPDATE: "/periodo-escolar/update",
+  },
 };

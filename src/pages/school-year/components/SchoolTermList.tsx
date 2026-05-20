@@ -1,11 +1,10 @@
 import { HiOutlinePencil } from "react-icons/hi";
 
-type SchoolTerm = {
-    id: number;
-    anio: number;
-    fecha_inicio: string;
-    fecha_fin: string;
-};
+import type { SchoolTerm } from "@/type/school-year/periodo.type";
+
+import {
+    isSchoolTermExpired
+} from "@/utils/validations/school-term.validation";
 
 type Props = {
     schoolTerms: SchoolTerm[];
@@ -13,6 +12,7 @@ type Props = {
 };
 
 export default function SchoolTermList({ schoolTerms, onEdit }: Props) {
+
     return (
         <div className="bg-white rounded-xl shadow overflow-x-auto">
             {/* 🔹 Tabla */}
@@ -28,33 +28,76 @@ export default function SchoolTermList({ schoolTerms, onEdit }: Props) {
                 </thead>
 
                 <tbody>
-                    {schoolTerms.map((schoolTerm) => (
-                        <tr key={schoolTerm.id}>
-                            <td className="px-5 text-xs text-gray-400 hidden sm:table-cell"># {schoolTerm.id}</td>
-                            <td className="px-5 ">
-                                <div className="flex flex-col">
-                                    <span>{schoolTerm.anio}</span>
+                    {schoolTerms.map((schoolTerm) => {
 
-                                    {/* ID solo en móvil */}
-                                    <span className="text-xs text-gray-400 sm:hidden">
-                                        #{schoolTerm.id}
-                                    </span>
-                                </div>
-                            </td>
-                            <td className="px-5 text-xs text-center">{schoolTerm.fecha_inicio}</td>
-                            <td className="px-5 text-xs text-center">{schoolTerm.fecha_fin}</td>
-                            <td className="py-2">
-                                <div className="flex sm:flex-row justify-center items-center gap-2">
-                                    <button
-                                        onClick={() => onEdit(schoolTerm)}
-                                        className="p-2 text-primary border border-transparent hover:bg-blue-50 hover:border-blue-500 rounded-full cursor-pointer"                                    >
-                                        <HiOutlinePencil size={16} />
-                                    </button>
+                        const isExpired =
+                            isSchoolTermExpired(
+                                schoolTerm.fechaFin
+                            );
 
-                                </div>
-                            </td>
-                        </tr>
-                    ))}
+                        return (
+
+                            <tr key={schoolTerm.idPeriodo}>
+
+                                <td className="px-5 py-2 text-xs text-gray-400 hidden sm:table-cell">
+                                    # {schoolTerm.idPeriodo}
+                                </td>
+
+                                <td className="px-5 py-2">
+                                    <div className="flex flex-col">
+
+                                        <span>{schoolTerm.anio}</span>
+
+                                        {/* ID solo en móvil */}
+                                        <span className="text-xs text-gray-400 sm:hidden">
+                                            #{schoolTerm.idPeriodo}
+                                        </span>
+
+                                    </div>
+                                </td>
+
+                                <td className="px-5 py-2 text-xs text-center">
+                                    {schoolTerm.fechaInicio}
+                                </td>
+
+                                <td className="px-5 py-2 text-xs text-center">
+                                    {schoolTerm.fechaFin}
+                                </td>
+
+                                <td className="py-2">
+
+                                    <div className="flex sm:flex-row justify-center items-center gap-2">
+
+                                        <button
+                                            onClick={() => {
+                                                if (!isExpired) {
+                                                    onEdit(schoolTerm);
+                                                }
+                                            }}
+                                            disabled={isExpired}
+                                            title={
+                                                isExpired
+                                                    ? "No se puede editar un periodo académico finalizado"
+                                                    : "Editar periodo académico"
+                                            }
+                                            className={`
+                                p-2 rounded-full border transition
+                                ${isExpired
+                                                    ? "text-gray-300 cursor-not-allowed border-transparent"
+                                                    : "text-primary border-transparent hover:bg-blue-50 hover:border-blue-500 cursor-pointer"
+                                                }
+                            `}
+                                        >
+                                            <HiOutlinePencil size={16} />
+                                        </button>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </table>
         </div>
