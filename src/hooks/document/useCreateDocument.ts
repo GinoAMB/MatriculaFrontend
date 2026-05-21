@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import axios from "axios";
 import { crearTipoDocumento } from "@/api/service/document/document.service";
 
 import type { DocumentType, CreateDocumentType } from "@/type/document/document.type";
@@ -7,7 +7,6 @@ import type { DocumentType, CreateDocumentType } from "@/type/document/document.
 export const useCreateDocument = () => {
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
 
     const crearDocumento = async (
         documentData: CreateDocumentType
@@ -16,15 +15,22 @@ export const useCreateDocument = () => {
         try {
 
             setLoading(true);
-            setError(null);
 
             const data = await crearTipoDocumento(documentData);
 
             return data;
         } catch (err) {
 
-            setError("Error al crear el tipo de documento");
-            return null;
+            let errorMessage = "Ocurrió un error inesperado";
+
+            if (axios.isAxiosError(err)) {
+
+                errorMessage =
+                    err.response?.data?.message ||
+                    "Error al crear el periodo";
+            }
+
+            throw new Error(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -33,6 +39,5 @@ export const useCreateDocument = () => {
     return {
         crearDocumento,
         loading,
-        error,
     };
 }

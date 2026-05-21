@@ -15,6 +15,7 @@ import { useUpdateCountry } from "@/hooks/country/useUpdateCountry";
 import type { Country } from "@/type/country/country.type";
 
 import { showSuccess, showError } from "@/utils/toast";
+import ErrorState from "@/components/ErrorState";
 
 export default function Country() {
 
@@ -94,7 +95,11 @@ export default function Country() {
 
         } catch (error) {
 
-            showError("Error al crear el país");
+            if (error instanceof Error) {
+                showError(error.message);
+            } else {
+                showError("Error al crear el país");
+            }
         }
     };
 
@@ -119,13 +124,22 @@ export default function Country() {
 
         } catch (error) {
 
-            showError("Error al actualizar el país");
+            if (error instanceof Error) {
+                showError(error.message);
+            } else {
+                showError("Error al actualizar el país");
+            }
         }
     };
 
-    //  Error
+    // Error
     if (error) {
-        return <p>{error}</p>;
+        return (
+            <ErrorState
+                message={error}
+                onRetry={recargar}
+            />
+        );
     }
 
     return (

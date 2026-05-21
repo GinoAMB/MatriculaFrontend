@@ -6,6 +6,7 @@ import CreateRoleModal from "./modals/CreateRoleModal";
 import EditRoleModal from "./modals/EditRoleModal";
 import Pagination from "@/components/Pagination";
 import Loader from "@/components/Loader";
+import ErrorState from "@/components/ErrorState";
 
 import { useRoles } from "@/hooks/role/useRoles";
 import { useUpdateRole } from "@/hooks/role/useUpdateRole";
@@ -42,7 +43,11 @@ export default function RolePage() {
 
         } catch (error) {
 
-            showError("Error al crear el rol");
+           if (error instanceof Error) {
+                showError(error.message);
+            } else {
+                showError("Error al crear el rol");
+            }
         }
     };
 
@@ -74,7 +79,11 @@ export default function RolePage() {
 
         } catch (error) {
 
-            showError("Error al actualizar el rol");
+            if (error instanceof Error) {
+                showError(error.message);
+            } else {
+                showError("Error al actualizar el rol");
+            }
         }
     };
 
@@ -89,9 +98,14 @@ export default function RolePage() {
         currentPage * itemsPerPage
     );
 
-    // 🔹 Error
+    // Error
     if (error) {
-        return <p>{error}</p>;
+        return (
+            <ErrorState
+                message={error}
+                onRetry={recargar}
+            />
+        );
     }
 
     return (

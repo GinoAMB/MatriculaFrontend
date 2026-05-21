@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import axios from "axios";
 import { createPais } from "@/api/service/country/country.service";
 
 import type { Country, CreateCountry } from "@/type/country/country.type";
@@ -7,7 +7,6 @@ import type { Country, CreateCountry } from "@/type/country/country.type";
 export const useCreateCountry = () => {
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
 
     const crearPais = async (
         countryData: CreateCountry
@@ -16,7 +15,6 @@ export const useCreateCountry = () => {
         try {
 
             setLoading(true);
-            setError(null);
 
             const data = await createPais(countryData);
 
@@ -24,8 +22,16 @@ export const useCreateCountry = () => {
 
         } catch (err) {
 
-            setError("Error al crear el país");
-            return null;
+            let errorMessage = "Ocurrió un error inesperado";
+
+            if (axios.isAxiosError(err)) {
+
+                errorMessage =
+                    err.response?.data?.message ||
+                    "Error al crear el periodo";
+            }
+
+            throw new Error(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -34,6 +40,5 @@ export const useCreateCountry = () => {
     return {
         crearPais,
         loading,
-        error,
     };
 }

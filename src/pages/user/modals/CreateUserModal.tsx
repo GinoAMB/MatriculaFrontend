@@ -87,7 +87,6 @@ export default function CreateUserModal({
 
         onCreate(form);
 
-        handleClose();
     };
 
     return (

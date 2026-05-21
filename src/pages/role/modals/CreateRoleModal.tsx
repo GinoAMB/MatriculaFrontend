@@ -42,7 +42,6 @@ export default function CreateRoleModal({
             name: normalizeRoleName(name),
         });
 
-        handleClose();
     };
 
     

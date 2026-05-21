@@ -7,10 +7,12 @@ export const useUsuarios = (filtros: UsuarioFiltros) => {
   const [loading, setLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   const cargarUsuarios = useCallback(async () => {
     try {
       setLoading(true);
+      setError(null);
 
       const data = await obtenerUsuarios(filtros);
 
@@ -19,6 +21,7 @@ export const useUsuarios = (filtros: UsuarioFiltros) => {
       setTotalElements(data.totalElements);
     } catch (error) {
       console.error("Error al obtener usuarios:", error);
+      setError("Error al obtener usuarios");
     } finally {
       setLoading(false);
     }
@@ -34,5 +37,6 @@ export const useUsuarios = (filtros: UsuarioFiltros) => {
     totalPages,
     totalElements,
     recargar: cargarUsuarios,
+    error,
   };
 };

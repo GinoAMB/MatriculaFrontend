@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import axios from "axios";
 import { updateRole } from "@/api/service/role/role.service";
 
 import type { Role, UpdateRole } from "@/type/role/rol.type";
@@ -7,7 +7,6 @@ import type { Role, UpdateRole } from "@/type/role/rol.type";
 export const useUpdateRole = () => {
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
 
     const actualizarRol = async (
         roleData: UpdateRole
@@ -15,7 +14,6 @@ export const useUpdateRole = () => {
 
         try {
             setLoading(true);
-            setError(null);
 
             const data = await updateRole(roleData);
 
@@ -23,10 +21,16 @@ export const useUpdateRole = () => {
 
         } catch (err) {
 
-            console.error(err);
-            setError("Error al actualizar el rol");
+            let errorMessage = "Ocurrió un error inesperado";
 
-            return null;
+            if (axios.isAxiosError(err)) {
+
+                errorMessage =
+                    err.response?.data?.message ||
+                    "Error al crear el periodo";
+            }
+
+            throw new Error(errorMessage);
 
         } finally {
             setLoading(false);
@@ -36,6 +40,5 @@ export const useUpdateRole = () => {
     return {
         actualizarRol,
         loading,
-        error,
     };
 };

@@ -53,7 +53,6 @@ export default function EditReligionModal({
             nombre: normalizeReligionName(name),
         });
 
-        handleClose();
     };
 
     return (

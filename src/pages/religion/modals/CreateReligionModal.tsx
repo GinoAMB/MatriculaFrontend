@@ -43,7 +43,6 @@ export default function CreateReligionModal({
             name: normalizeReligionName(name),
         });
 
-        handleClose();
     };
 
     return (

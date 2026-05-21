@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 
 import { crearUsuario } from "@/api/service/usuario/usuario.service";
 
@@ -9,26 +10,25 @@ import type {
 export const useCreateUsuario = () => {
     const [loading, setLoading] = useState(false);
 
-    const [error, setError] = useState<string | null>(null);
-
     const createUser = async (
         usuario: UsuarioCreateRequest
     ) => {
         try {
             setLoading(true);
-            setError(null);
 
             return await crearUsuario(usuario);
 
-        } catch (err: any) {
-            console.error(err);
+        } catch (err) {
+            let errorMessage = "Ocurrió un error inesperado";
 
-            setError(
-                err?.response?.data?.message ||
-                "Error al crear usuario"
-            );
+            if (axios.isAxiosError(err)) {
 
-            throw err;
+                errorMessage =
+                    err.response?.data?.message ||
+                    "Error al crear el periodo";
+            }
+
+            throw new Error(errorMessage);
 
         } finally {
             setLoading(false);
@@ -38,6 +38,5 @@ export const useCreateUsuario = () => {
     return {
         createUser,
         loading,
-        error,
     };
 };

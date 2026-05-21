@@ -6,6 +6,7 @@ import Pagination from "@/components/Pagination";
 import CreateDocumentModal from "./modals/CreateDocumentModal";
 import EditDocumentModal from "./modals/EditDocumentModal";
 import Loader from "@/components/Loader";
+import ErrorState from "@/components/ErrorState";
 
 import { useDocument } from "@/hooks/document/useDocument";
 import { useCreateDocument } from "@/hooks/document/useCreateDocument";
@@ -73,41 +74,52 @@ export default function Document() {
             }
 
         } catch (error) {
-
-            showError("Error al crear el tipo de documento");
+            if (error instanceof Error) {
+                showError(error.message);
+            } else {
+                showError("Error al crear el tipo de documento");
+            }
         }
     };
-
     //  Actualizar documento
     const handleUpdateDocument = async (data: DocumentType) => {
 
-    try {
+        try {
 
-        const response = await actualizarDocumento({
-            idTipo: data.idTipo,
-            nombre: data.nombre,
-        });
+            const response = await actualizarDocumento({
+                idTipo: data.idTipo,
+                nombre: data.nombre,
+            });
 
-        if (response) {
+            if (response) {
 
-            await recargar();
+                await recargar();
 
-            showSuccess("Tipo de documento actualizado correctamente");
+                showSuccess("Tipo de documento actualizado correctamente");
 
-            setOpenEditModal(false);
+                setOpenEditModal(false);
 
-            setSelectedDocument(null);
+                setSelectedDocument(null);
+            }
+
+        } catch (error) {
+
+            if (error instanceof Error) {
+                showError(error.message);
+            } else {
+                showError("Error al actualizar el tipo de documento");
+            }
         }
+    };
 
-    } catch (error) {
-
-        showError("Error al actualizar el tipo de documento");
-    }
-};
-
-    //  Error
+    // Error
     if (error) {
-        return <p>{error}</p>;
+        return (
+            <ErrorState
+                message={error}
+                onRetry={recargar}
+            />
+        );
     }
 
     return (

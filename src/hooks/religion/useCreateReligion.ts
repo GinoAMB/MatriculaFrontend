@@ -1,11 +1,11 @@
 import { useState } from "react";
+import axios from "axios";
 import { crearReligion } from "@/api/service/religion/religion.service";
 import type { Religion, CreateReligion } from "@/type/religion/religion.type";
 
 export const useCreateReligion = () => {
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
 
     const crearNuevaReligion = async (
         religionData: CreateReligion
@@ -14,15 +14,22 @@ export const useCreateReligion = () => {
         try {
 
             setLoading(true);
-            setError(null);
 
             const data = await crearReligion(religionData);
 
             return data;
         } catch (err) {
 
-            setError("Error al crear la religión");
-            return null;
+            let errorMessage = "Ocurrió un error inesperado";
+
+            if (axios.isAxiosError(err)) {
+
+                errorMessage =
+                    err.response?.data?.message ||
+                    "Error al crear el periodo";
+            }
+
+            throw new Error(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -31,6 +38,5 @@ export const useCreateReligion = () => {
     return {
         crearNuevaReligion,
         loading,
-        error,
     };
 }

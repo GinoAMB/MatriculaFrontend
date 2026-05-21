@@ -47,7 +47,6 @@ export default function EditDocumentModal({
             nombre: normalizeDocumentName(name),
         });
 
-        onClose();
     };
 
     return (

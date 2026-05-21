@@ -44,7 +44,6 @@ export default function CreateDocumentModal({
             name: normalizeDocumentName(name),
         });
 
-        handleClose();
     };
 
     return (

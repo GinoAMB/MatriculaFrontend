@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { actualizarUsuario } from "@/api/service/usuario/usuario.service";
 import type { UsuarioUpdateRequest } from "@/type/user/user.type";
+import axios from "axios";
 
 export const useUpdateUser = () => {
 
@@ -28,6 +29,19 @@ export const useUpdateUser = () => {
 
       return response;
 
+    } catch (err) {
+
+      let errorMessage = "Ocurrió un error inesperado";
+
+      if (axios.isAxiosError(err)) {
+
+        errorMessage =
+          err.response?.data?.message ||
+          "Error al actualizar el usuario";
+      }
+
+
+      throw new Error(errorMessage);
     } finally {
       setLoading(false);
     }

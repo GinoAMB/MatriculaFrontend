@@ -44,7 +44,6 @@ export default function CreateCountryModal({
             name: normalizeCountryName(name),
         });
 
-        handleClose();
     };
 
     return (

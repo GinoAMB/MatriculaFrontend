@@ -16,6 +16,7 @@ import { useUpdateUser } from "@/hooks/user/useUpdateUser";
 import type { Usuario, UsuarioFiltros } from "@/type/user/user.type";
 
 import { showSuccess, showError } from "@/utils/toast";
+import ErrorState from "@/components/ErrorState";
 
 export default function User() {
     const [filtros, setFiltros] = useState<UsuarioFiltros>({
@@ -23,7 +24,7 @@ export default function User() {
         size: 10,
     });
 
-    const { usuarios, loading, totalPages, totalElements, recargar } =
+    const { usuarios, loading, totalPages, totalElements, recargar, error } =
         useUsuarios(filtros);
 
     const { roles, loading: loadingRoles } = useRoles();
@@ -129,7 +130,12 @@ export default function User() {
 
             setIsModalOpen(false);
         } catch (error) {
-            showError("Error al crear el usuario");
+
+            if (error instanceof Error) {
+                showError(error.message);
+            } else {
+                showError("Error al crear el usuario");
+            }
         }
     };
 
@@ -159,9 +165,24 @@ export default function User() {
             setIsEditModalOpen(false);
 
         } catch (error) {
-            showError("Error al actualizar usuario");
+
+            if (error instanceof Error) {
+                showError(error.message);
+            } else {
+                showError("Error al actualizar el usuario");
+            }
         }
     };
+
+    // Error
+    if (error) {
+        return (
+            <ErrorState
+                message={error}
+                onRetry={recargar}
+            />
+        );
+    }
 
     return (
         <div className="flex flex-col gap-3">

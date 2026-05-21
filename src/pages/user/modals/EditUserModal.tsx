@@ -195,7 +195,6 @@ export default function EditUserModal({
 
     onUpdate(dataToSend);
 
-    handleClose();
   };
 
   return (
