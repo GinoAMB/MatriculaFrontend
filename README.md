@@ -70,23 +70,23 @@ Incluye dashboards diferenciados para los diferentes perfiles del sistema, con:
 
 ### 🔐 Inicio de sesión
 
-![Inicio de sesión](./docs/screenshots/login.png)
+![Inicio de sesión](./src/docs/screenshots/login.png)
 
 ### 📊 Dashboard administrativo
 
-![Dashboard administrativo](./docs/screenshots/dashboard-admin.png)
+![Dashboard administrativo](./src/docs/screenshots/dashboard-admin.png)
 
 ### 🎓 Gestión de matrículas
 
-![Gestión de matrículas](./docs/screenshots/matriculas.png)
+![Gestión de matrículas](./src/docs/screenshots/matriculas.png)
 
 ### 📝 Registro de matrícula
 
-![Registro de matrícula](./docs/screenshots/registro-matricula.png)
+![Registro de matrícula](./src/docs/screenshots/registro-matricula.png)
 
 ### 👤 Gestión de usuarios
 
-![Gestión de usuarios](./docs/screenshots/usuarios.png)
+![Gestión de usuarios](./src/docs/screenshots/usuarios.png)
 
 ---
 
