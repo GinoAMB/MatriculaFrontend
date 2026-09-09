@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { IoMdRefresh } from "react-icons/io";
 
+import type { Nivel } from "@/type/academic/academin.type";
+
 type Props = {
+    niveles: Nivel[];
+    loading: boolean;
+    error: string | null;
     onSearch: (filters: {
         search: string;
         level: string;
@@ -10,16 +15,80 @@ type Props = {
     }) => void;
 };
 
-export default function TuitionFilters({ onSearch }: Props) {
+export default function TuitionFilters({
+    onSearch,
+    niveles,
+    loading,
+    error,
+}: Props) {
+
     const [search, setSearch] = useState("");
     const [level, setLevel] = useState("");
     const [grade, setGrade] = useState("");
     const [section, setSection] = useState("");
 
+    //Resetear grado y sección al cambiar nivel
     useEffect(() => {
-        onSearch({ search, level, grade, section });
-    }, [search, level, grade, section]);
+        setGrade("");
+        setSection("");
+    }, [level]);
 
+    // Resetear sección al cambiar grado
+    useEffect(() => {
+        setSection("");
+    }, [grade]);
+
+    // Nivel seleccionado
+    const selectedNivel = niveles.find(
+        (n) => n.idNivel.toString() === level
+    );
+
+    // Grados del nivel
+    const grados = selectedNivel?.grados || [];
+
+    // Grado seleccionado
+    const selectedGrado = grados.find(
+        (g) => g.idGrado.toString() === grade
+    );
+
+    // Secciones del grado
+    const secciones = selectedGrado?.secciones || [];
+
+    // Buscar automáticamente
+    useEffect(() => {
+
+        const nivelNombre =
+            niveles.find(
+                (n) => n.idNivel.toString() === level
+            )?.nombre || "";
+
+        const gradoNombre =
+            grados.find(
+                (g) => g.idGrado.toString() === grade
+            )?.nombre || "";
+
+        const seccionNombre =
+            secciones.find(
+                (s) => s.idSeccion.toString() === section
+            )?.nombre || "";
+
+        onSearch({
+            search,
+            level: nivelNombre,
+            grade: gradoNombre,
+            section: seccionNombre,
+        });
+
+    }, [
+        search,
+        level,
+        grade,
+        section,
+        niveles,
+        onSearch
+    ]);
+
+    // Limpiar filtros
     const handleClear = () => {
         setSearch("");
         setLevel("");
@@ -29,10 +98,9 @@ export default function TuitionFilters({ onSearch }: Props) {
 
     return (
         <div className="bg-white p-4 rounded-xl shadow w-full">
-            
+
             <div className="flex flex-col lg:flex-row gap-3 w-full">
-                
-                {/* 🔍 Buscador (más grande en desktop) */}
+
                 <input
                     type="text"
                     placeholder="Buscar por nombre, DNI o cédula..."
@@ -41,46 +109,66 @@ export default function TuitionFilters({ onSearch }: Props) {
                     className="w-full lg:flex-1 border border-gray-300 rounded-xl px-3 py-2 text-sm"
                 />
 
-                {/* 📦 Filtros */}
                 <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-                    
+
                     <select
                         value={level}
                         onChange={(e) => setLevel(e.target.value)}
-                        className="w-full sm:w-[150px] border border-gray-300 rounded-xl px-3 py-2 text-sm"
+                        disabled={loading || !!error}
+                        className="w-full sm:w-[150px] border border-gray-300 rounded-xl px-3 py-2 text-sm disabled:bg-gray-100"
                     >
-                        <option value="">Nivel</option>
-                        <option value="Inicial">Inicial</option>
-                        <option value="Primaria">Primaria</option>
-                        <option value="Secundaria">Secundaria</option>
+                        <option value="">
+                            {loading ? "Cargando..." : "Nivel"}
+                        </option>
+
+                        {niveles.map((nivel) => (
+                            <option
+                                key={nivel.idNivel}
+                                value={nivel.idNivel}
+                            >
+                                {nivel.nombre}
+                            </option>
+                        ))}
                     </select>
 
                     <select
                         value={grade}
                         onChange={(e) => setGrade(e.target.value)}
-                        className="w-full sm:w-[120px] border border-gray-300 rounded-xl px-3 py-2 text-sm"
+                        disabled={!level || loading || !!error}
+                        className="w-full sm:w-[120px] border border-gray-300 rounded-xl px-3 py-2 text-sm disabled:bg-gray-100"
                     >
                         <option value="">Grado</option>
-                        <option value="1">1°</option>
-                        <option value="2">2°</option>
-                        <option value="3">3°</option>
-                        <option value="4">4°</option>
-                        <option value="5">5°</option>
+
+                        {grados.map((grado) => (
+                            <option
+                                key={grado.idGrado}
+                                value={grado.idGrado}
+                            >
+                                {grado.nombre}
+                            </option>
+                        ))}
                     </select>
 
                     <select
                         value={section}
                         onChange={(e) => setSection(e.target.value)}
-                        className="w-full sm:w-[120px] border border-gray-300 rounded-xl px-3 py-2 text-sm"
+                        disabled={!grade || loading || !!error}
+                        className="w-full sm:w-[120px] border border-gray-300 rounded-xl px-3 py-2 text-sm disabled:bg-gray-100"
                     >
                         <option value="">Sección</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
+
+                        {secciones.map((seccion) => (
+                            <option
+                                key={seccion.idSeccion}
+                                value={seccion.idSeccion}
+                            >
+                                {seccion.nombre}
+                            </option>
+                        ))}
                     </select>
+
                 </div>
 
-                {/* 🔄 Botón */}
                 <button
                     onClick={handleClear}
                     className="btn-secondary flex items-center justify-center gap-2 text-sm w-full sm:w-auto px-4"
@@ -89,6 +177,12 @@ export default function TuitionFilters({ onSearch }: Props) {
                     Limpiar
                 </button>
             </div>
+
+            {error && (
+                <p className="text-red-500 text-sm mt-2">
+                    {error}
+                </p>
+            )}
         </div>
     );
 }

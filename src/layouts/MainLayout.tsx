@@ -104,7 +104,7 @@ export default function MainLayout() {
         </header>
 
         {/* CONTENIDO */}
-        <main className="flex-1 p-4 md:p-6 bg-gray-50 overflow-y-auto cont-scroll">
+        <main id="main-scroll-container" className="flex-1 p-4 md:p-6 bg-gray-50 overflow-y-auto cont-scroll">
           <Outlet />
         </main>
       </div>

@@ -39,4 +39,14 @@ export const API_ENDPOINTS = {
     CREAR: "/periodo-escolar/register",
     UPDATE: "/periodo-escolar/update",
   },
+  TUITION: {
+    LISTA: "/matriculas/lista",
+    CREAR: "/matriculas",
+    PRINT: "/matriculas/print",
+    DETALLE: (id: number) => `/matriculas/${id}`,
+  },
+  ACADEMIC: {
+    LISTA: "/academico/niveles",
+    DETALLE: (id: number) => `/academico/niveles/${id}`,
+  },
 };
